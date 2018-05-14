@@ -231,6 +231,22 @@
     },
     created() {
 
+      var params = {
+        userName: 'one',
+        passWord: 'two'
+      };
+      alert(JSON.stringify(this.$api));
+      this.$api.orderList(params).then((res) => {
+        alert(JSON.stringify(res.data));
+        if (!res.error) {
+
+          this.$Message.success(res.msg)
+
+        } else {
+          this.$Message.error(res.msg)
+
+        }
+      })
       //列表页获取数据
       this.getdata();
       //查询流程配置
@@ -483,7 +499,7 @@
           currentPage: pageRequest.currentPage,
           procedureName: this.procedureName,
           procedureConfigId: this.procedureConfigId,
-          state:this.state,
+          state: this.state,
 
         };
         this.$http.get(
@@ -722,7 +738,7 @@
 
     data() {
       return {
-        state:0,//默认选出全部状态
+        state: 0,//默认选出全部状态
 
         //流程保存标志位
         procedureSaveFlag: true,

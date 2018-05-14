@@ -1,7 +1,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
-module.exports = {
+var config = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
@@ -23,10 +23,11 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 9528,
+    port: 9588,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    baseServerUrl: 'http://localhost:9501/',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
@@ -36,3 +37,19 @@ module.exports = {
     cssSourceMap: false
   }
 }
+
+// 需要代理的接口
+var proxyList = [
+  '/*/procedure/**/*'
+]
+
+const targetPath = config.dev.baseServerUrl // 服务器的地址 可以使www.xx.com
+
+for (let i = 0; i < proxyList.length; i++) {
+  config.dev.proxyTable[proxyList[i]] = {
+    target: targetPath,
+    secure: false,
+    changeOrigin: true
+  }
+}
+module.exports = config

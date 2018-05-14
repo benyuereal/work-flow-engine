@@ -285,6 +285,8 @@
           this.warningMessage = data.message;
           if (code === 0 || code == 0) {
             this.$Message.success('Success!');
+            //刷新表格
+            this.getEntranceData();
           } else {
             this.$Message.warning(this.warningMessage);
 
@@ -870,7 +872,7 @@
           prevPage: 0,
           nextPage: 0,
           //页面显示的数据个数
-          pageSize: 5,
+          pageSize: 10,
           count: 0,
           //初始化当前页是1
           currentPage: 1,

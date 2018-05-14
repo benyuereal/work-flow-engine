@@ -13,6 +13,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
 import Grid from 'vue-js-grid'
 import vueDragAndDropList from 'vue-drag-and-drop-list';
+import api from './api/index.js'
+Vue.use(api)
 Vue.use(vueDragAndDropList);
 Vue.use(Grid)
 Vue.use(ElementUI);
