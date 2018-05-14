@@ -1,4 +1,3 @@
-# lepoard vue  admin https://autors.github.io/vueleopard
 ## Version：v0.5
 
 ## Introduction
@@ -22,7 +21,7 @@ npm install
 ```bush
 npm run dev
 ```
-### Production(Build) ,and access:http://localhost:9528
+### Production(Build) ,and access:http://localhost:9588
 ```bush
 npm run build
 ```
