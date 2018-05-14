@@ -33,7 +33,6 @@ export default function fetch (options) {
     // http response 拦截器
     instance.interceptors.response.use(
       response => {
-
         iView.LoadingBar.finish()
         return response
       },

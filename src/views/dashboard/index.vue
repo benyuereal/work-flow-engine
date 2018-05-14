@@ -231,22 +231,6 @@
     },
     created() {
 
-      var params = {
-        userName: 'one',
-        passWord: 'two'
-      };
-      alert(JSON.stringify(this.$api));
-      this.$api.orderList(params).then((res) => {
-        alert(JSON.stringify(res.data));
-        if (!res.error) {
-
-          this.$Message.success(res.msg)
-
-        } else {
-          this.$Message.error(res.msg)
-
-        }
-      })
       //列表页获取数据
       this.getdata();
       //查询流程配置
@@ -502,20 +486,10 @@
           state: this.state,
 
         };
-        this.$http.get(
-          "http://localhost:9501/procedure/test",//请求地址，有条件查询流程配置数据
-          {
-            params: params//参数
-          },
-          {
-            emulateJSON: true//是否是json
-          }).then(function (response) {
-          //首先根据返回
-
-          var result = response.data;
-          var data = result.data;
-          var code = result.code;
-          var message = result.message;
+        this.$api.procedureList(params).then((response) => {
+          var data = response.data;
+          var code = response.code;
+          var message = response.message;
 
           //如果是成功的返回,就会有关于分页的处理
           if (code === 0) {

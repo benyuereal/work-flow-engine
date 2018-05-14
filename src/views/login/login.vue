@@ -56,6 +56,7 @@
     methods: {
       handleSubmit () {
         this.$refs.loginForm.validate((valid) => {
+
           if (valid) {
             if (this.form.password !== "123456") {
               this.$Message.error('密码错误');

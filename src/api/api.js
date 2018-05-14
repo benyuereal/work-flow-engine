@@ -16,11 +16,11 @@ import fetch from './fetch.js'
 //   })
 // }
 
-const orderList = params => {
+const procedureList = params => {
   return fetch({
     url: `/procedure/test`,
     method: 'get',
-    params: ''
+    params: params
   })
 }
 
@@ -64,7 +64,7 @@ const checkToken = params => {
   })
 }
 const apiList = {
-  orderList,
+  procedureList,
   articleList,
   userList,
   postUserInfo,
