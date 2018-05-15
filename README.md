@@ -109,4 +109,5 @@ npm install  babel-preset-es2015
 #### 文件路径找不到
 
 * <https://blog.csdn.net/lhb_11/article/details/79455015>
-
+/usr/local/etc/nginx
+/Users/apple/Documents/front-project/work-flow-engine/dist

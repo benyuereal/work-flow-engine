@@ -71,7 +71,8 @@ export const otherRouterMap = [
 ];
 
 export default new Router({
-  mode: 'history', //后端支持可开
+  //TODO 这个很重要 需要仔细研究
+  // mode: 'history', //后端支持可开 /Users/apple/Documents/front-project/work-flow-engine/dist
   scrollBehavior: () => ({y: 0}),
   routes: [
     ...constantRouterMap,
