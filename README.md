@@ -111,3 +111,7 @@ npm install  babel-preset-es2015
 * <https://blog.csdn.net/lhb_11/article/details/79455015>
 /usr/local/etc/nginx
 /Users/apple/Documents/front-project/work-flow-engine/dist
+#### nginx 403 
+原因 用户权限未配置
+user  Mac staff;
+参考: <https://blog.csdn.net/xunxianren007/article/details/53996027>
