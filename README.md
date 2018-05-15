@@ -85,3 +85,28 @@ server {
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
+
+
+
+#### vue打包坑
+* <https://www.cnblogs.com/wang1048076313/p/7407417.html>
+
+npm install  babel-preset-es2015
+
+```json
+{
+  test: /\.js$/,
+  loader: 'babel-loader',
+  options:{
+    presets:["es2015"]
+  },
+  exclude:[/node_modules/]
+
+},
+
+```
+
+#### 文件路径找不到
+
+* <https://blog.csdn.net/lhb_11/article/details/79455015>
+
