@@ -15,6 +15,15 @@ import fetch from './fetch.js'
 //     method: 'post'
 //   })
 // }
+const login = params => {
+  return fetch({
+    url: `/login`,
+    method: 'post',
+    params: {
+      userInfo:true,
+    }
+  })
+}
 
 const procedureList = params => {
   return fetch({
@@ -189,6 +198,7 @@ const apiList = {
   nodeDetail,
   nodeRemove,
   nodeSave,
+  login,
 
 }
 

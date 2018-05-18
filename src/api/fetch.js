@@ -48,6 +48,7 @@ export default function fetch(options) {
     // http response 拦截器
     instance.interceptors.response.use(
       response => {
+        console.log(JSON.stringify(response));
         //判断是否是过期 如果是过期(302重定向) 就刷新页面
         var result = response.data;
         var code = result.code, data = result.data, message = result.message;
