@@ -14,6 +14,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import Grid from 'vue-js-grid'
 import vueDragAndDropList from 'vue-drag-and-drop-list';
 import api from './api/index.js'
+import {Message,} from 'iview';
 Vue.use(api)
 Vue.use(vueDragAndDropList);
 Vue.use(Grid)
@@ -24,7 +25,7 @@ Vue.use(VueJsonp)
 Vue.use(iView);
 NProgress.configure({});
 Vue.config.productionTip = false;
-
+Vue.prototype.$Message = Message
 
 const whiteList = ['/login'];
   router.beforeEach((to, from, next) => {

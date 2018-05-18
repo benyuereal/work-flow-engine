@@ -63,12 +63,96 @@ const checkToken = params => {
     params: params
   })
 }
+/**
+ * 入口配置列表页
+ * @param params
+ */
+const entranceList = params => {
+  return fetch({
+    url: `/entrance/find`,
+    method: 'get',
+    params: params
+  })
+}
+
+const entranceRemove = params => {
+  return fetch({
+    url: `/entrance/remove`,
+    method: 'post',
+    params: params
+  })
+}
+
+const goodsUnitDetail = params => {
+  return fetch({
+    url: `/init/getProduct`,
+    method: 'get',
+    params: params
+  })
+}
+
+const entranceSave = params => {
+  return fetch({
+    url: `/entrance/save`,
+    method: 'post',
+    params: params
+  })
+}
+
+const entranceUpdate = params => {
+  return fetch({
+    url: `/entrance/update`,
+    method: 'post',
+    params: params
+  })
+}
+const procedureByEntranceId = params => {
+  return fetch({
+    url: `/procedure/getProcedureByEntrance`,
+    method: 'get',
+    params: params
+  })
+}
+
+const procedureSaveOrUpdate = params => {
+  return fetch({
+    url: params.type===1?`/procedure/save`:`/procedure/update`,
+    method: 'post',
+    params: params
+  })
+}
+
+const procedureRemove = params => {
+  return fetch({
+    url: `/procedure/remove`,
+    method: 'post',
+    params: params
+  })
+}
+
+const entranceBindProcedure = params => {
+  return fetch({
+    url: `/entrance/bind`,
+    method: 'post',
+    params: params
+  })
+}
+
 const apiList = {
   procedureList,
   articleList,
   userList,
   postUserInfo,
-  checkToken
+  checkToken,
+  entranceList,
+  entranceRemove,
+  goodsUnitDetail,
+  entranceSave,
+  entranceUpdate,
+  procedureByEntranceId,
+  procedureSaveOrUpdate,
+  procedureRemove,
+  entranceBindProcedure
 }
 
 export default apiList

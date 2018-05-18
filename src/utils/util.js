@@ -70,5 +70,7 @@ util.getUser =function(){
 util.removeUser =function(){
   Cookies.remove("userInfo");
 }
-
+util.getUrlKey=function (name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
+}
 export default util;

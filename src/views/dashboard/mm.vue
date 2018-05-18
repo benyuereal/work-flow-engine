@@ -228,6 +228,7 @@
   import {mapGetters} from 'vuex'
   import expandRow from './table-expand';
   import city from '../../utils/city'
+  import Vue from 'vue'
 
   export default {
     components: {expandRow},
@@ -264,112 +265,58 @@
         });
       },
 
-      //删除流程
+      //删除入口
       removeEntrance(index) {
         var id = this.entranceData[index].id;
-        var url = 'http://localhost:9501/entrance/remove'
         var request = {
           id: id,
         }
-        this.$http.post(
-          url,//请求地址
-          {
-            params: JSON.stringify(request)//参数
-          },
-          {
-            emulateJSON: true,//是否是json
-          }
-        ).then(function (res) {
-          var data = res.data;
-          var code = data.code;
-          this.warningMessage = data.message;
+        this.$api.entranceRemove(request).then((response) => {
+          var data = response.data;
+          var code = response.code;
           if (code === 0 || code == 0) {
-            this.$Message.success('Success!');
+            Vue.prototype.$Message.success("success");
             //刷新表格
             this.getEntranceData();
-          } else {
-            this.$Message.warning(this.warningMessage);
-
           }
-
-        }, function (res) {
-          this.$Message.warning("fail");
-
         });
       },
       entranceBindProcedure() {
-        var url = 'http://localhost:9501/entrance/bind';
 
         var params = this.bindForm;
-        var request = JSON.stringify(params);
-        this.$http.post(url
-          ,//请求地址，有条件查询流程配置数据
-          {
-            params: request//参数
-          },
-          {
-            emulateJSON: true//是否是json
-          }).then(function (response) {
+        this.$api.entranceBindProcedure(params).then((response) => {
           //首先根据返回
 
-          var result = response.data;
-          var code = result.code;
-          var message = result.message;
-
+          var data = response.data;
+          var code = response.code;
           //如果是成功的返回,就会有关于分页的处理
-          if (code === 0) {
-            this.$Message.success(message);
-            //刷新列表页
+          if (code === 0&&data.type===0) {
+            Vue.prototype.$Message.success("success");
+            //刷新列V表页
             this.getEntranceData();
             //隐藏
             this.bindEntranceModal = false;
-
-          } else {
-            //否则弹出警告，并且在警告上打印出后台返回的信息
-            this.$Message.warning(message);
-
-
           }
-
-
         })
       },
       //获取全部procedure
       getProcedureByEntranceId() {
-        var url = 'http://localhost:9501/procedure/getProcedureByEntrance';
-
-        this.$http.get(url
-          ,//请求地址，有条件查询流程配置数据
-
-          {
-            emulateJSON: true//是否是json
-          }).then(function (response) {
+        var result, data, code;
+        var request = {
+          procedureId: '',
+          entranceId: '',
+          id: ''
+        }
+        this.$api.procedureByEntranceId(request).then((response) => {
           //首先根据返回
 
-          var result = response.data;
-          var data = result.data;
-          var code = result.code;
-          var message = result.message;
-
-          //如果是成功的返回,就会有关于分页的处理
+          var data = response.data
+            , code = response.code
+            , type = data.type;
           if (code === 0) {
-            //如果没有任何信息
-            var type = data.type;
-            //如果是有提示，先打印提示
-            if (type === 2) {
-
-              this.$Message.warning(message);
-            } else {
-              //否则 就讲数据打印到页面上
-
+            if (type !== 2) {
               this.proceduresByEntrance = data.procedures;
             }
-
-          } else {
-            //否则弹出警告，并且在警告上打印出后台返回的信息
-            this.$Message.warning(message);
-
-
           }
 
 
@@ -442,19 +389,12 @@
       findGoodsLine: function (type) {
 
         var code = 0;
+        var form = this.saveEntranceForm;
+        //如果类型是1，就表示是查看商品线，需要拿到选中的商品类型
+        //如果类型是2，就表示查看商品单元，需要拿到选中的商品线
         //根据类型来取发送请求的数据
-        if (type === 1) {
-          //如果类型是1，就表示是查看商品线，需要拿到选中的商品类型
-          code = this.saveEntranceForm.goodsType;
-          //然后调用方法，获取下级类目
-          this.getGoodsType(code, type);
-
-          //如果类型是2，就表示查看商品单元，需要拿到选中的商品线
-        } else if (type === 2) {
-          code = this.saveEntranceForm.goodsLine;
-          //然后调用方法，获取下级类目
-          this.getGoodsType(code, type);
-        }
+        type === 1 ? code = form.goodsType : code = form.goodsLine;
+        this.getGoodsType(code, type);
       },
       //处理页码
       handlePageSize() {
@@ -482,14 +422,14 @@
             //关闭下面的按钮
             this.entranceLoading = false;
 
-            this.$Message.error('缺少信息!');
+            Vue.prototype.$Message.error('缺少信息!');
           }
         });
 
       },
 
       //保存入口信息
-      saveEntrance() {
+      saveEntrance: function () {
         //首先将城市名字找到
         this.getCityName();
         //商品单元名字找到
@@ -498,111 +438,78 @@
         request.bill = request.bill[0];
         request.written = request.written[0];
 
-        //去除""
         var reqStr = JSON.stringify(request);
         //保存入库
-        var url = this.adding ? 'http://127.0.0.1:9501/entrance/save' : 'http://127.0.0.1:9501/entrance/update';
-        this.$http.post(
-          url,
-          {
-            request: reqStr,
-          },
-          {
-            emulateJSON: true,//是否是json
-          }
-        ).then(function (response) {
-          var data = response.data;
-          var code = data.code;
-          var message = data.message;
+        var data, code;
+        this.adding ? this.$api.entranceSave(request).then((response) => {
+          code = response.code;
+          data = response.data;
           if (code === 0) {
-
             //关闭表单
             this.addEntranceModal = false;
-            this.$Message.success('Success!');
+            Vue.prototype.$Message.success("success");
             //刷新表格
             this.getEntranceData();
-
-          } else {
-            this.warningMessage = data.message;
-            this.$Message.warning(this.warningMessage);
           }
-          this.entranceLoading = false;
-
-        }, function (res) {
-          this.validateStatus = false;
+        }) : this.$api.entranceUpdate(request).then((response) => {
+          code = response.code;
+          data = response.data;
+          if (code === 0) {
+            //关闭表单
+            this.addEntranceModal = false;
+            Vue.prototype.$Message.success("success");
+            //刷新表格
+            this.getEntranceData();
+          }
         });
+
+
       },
+
       //初始化表格
       getEntranceData() {
 
         //请求数据，有两个 一个是分页的请求对象，一个是搜索条件的对象，由于wf不支持大对象
-        //直接就放一个里面了
-        var request = {
-          //请求的搜索条件
+        //搜索框条件
+        var
+          brand = this.brandTypeModal,
+          source = this.sourceTypeModal,
+          written = this.writtenTypeModal,
+          procedureConfigId = this.entranceProcedureConfigId;
+        //分页条件
+        var
+          currentPage = this.page.currentPage,
+          pageSize = this.page.pageSize,
+          count = this.page.count,
+          request = {
+            //请求的搜索条件
+            brand: brand,
+            source: source,
+            written: written,
+            procedureConfigId: procedureConfigId,
+            currentPage: currentPage,
+            pageSize: pageSize,
+            count: count,
+          };
+        //返回数据
+        var
 
-          //品牌
-          brand: this.brandTypeModal,
-          //来源
-          source: this.sourceTypeModal,
-          //签单类型
-          written: this.writtenTypeModal,
-          //流程配置id
-          procedureConfigId: this.entranceProcedureConfigId,
-          //分页条件
-          currentPage: this.page.currentPage,
-          pageSize: this.page.pageSize,
-          count: this.page.count,
-
-
-        };
-
+          data,
+          code;
         //获取入口表格数据
-        var data;
-        this.$http.get(
-          "http://127.0.0.1:9501/entrance/find",
-          {
-            params: request,
-          },
-          {
-            emulateJSON: true,//是否是json
-          }
-        ).then(function (response) {
+        this.$api.entranceList(request).then((response) => {
 
 
-          var result = response.data;
-          var data = result.data;
-          var code = result.code;
-          var message = result.message;
+          data = response.data,
+            code = response.code;
 
-          //如果是成功的返回,就会有关于分页的处理
           if (code === 0) {
-            //如果没有任何信息
             var type = data.type;
+
             //如果是有提示，先打印提示
-            if (type === 2) {
-
-              this.$Message.warning(message);
-            } else {
-              //如果状态是0 就展示 否则展示默认的
-              var count = data.count;
-              var entranceData = data.entrances;
-              var page = this.page;
-              this.entranceData = entranceData;
-              //页数赋值
-              page.count = count;
-              //判断当前的数据个数 以及当前页码大小
-              //如果当前数据的个数 比每页显示的个数还要小的话，就显示一页
-              //反之，就显示前十个
-              if (page.pageSize < entranceData.length) {
-                //如果数量小于当前页面，那么就在第一页将数据打上去
-                this.entranceData = entranceData.slice(0, page.pageSize);
-              }
-            }
-
-          } else {
-            //否则弹出警告，并且在警告上打印出后台返回的信息
-            this.$Message.warning(message);
-
+            //如果状态是0 就展示 否则展示默认的
+            this.page.count = data.count;
+            this.entranceData = data.entrances;
 
           }
 
@@ -610,43 +517,21 @@
         })
       },
 
-      //初始化 获取商品类型等数据
-      getGoodsType(code, type) {
+      ////初始的时候传的是0
+      getGoodsType: function (code, type) {
         var request = {
-            code: code,//初始的时候传的是0
-          }
-        ;
-        this.$http.get(
-          "http://127.0.0.1:9501/init/getProduct",
-          {
-            params: request
-          },
-          {
-            emulateJSON: true,//是否是json
-          }
-        ).then(function (response) {
+          code: code,
+        }
+
+        this.$api.goodsUnitDetail(request).then((response) => {
           var data = response.data;
-          var code = data.code;
-          //code===0的时候是成功
+          var code = response.code;
           if (code === 0) {
-
-            var results = data.data;
-            //返回的结果封装在data里面
-            //如果是类型1,就是商品类型;2商品线;3商品单元
-            if (type === 0) {
-              //商品类型
-              this.goodsType = results;
-              //商品线
-            } else if (type === 1) {
-              this.goodsLine = results;
-
-              //商品单元
-            } else {
-              this.goodsUnit = results;
-
-            }
-          } else {
-            //其他情况就是失败
+            var results = data;
+            //如果是类型1,就是商品类型、2商品线、3商品单元
+            type === 0 ? this.goodsType = results
+              : type === 1 ? this.goodsLine = results
+              : this.goodsUnit = results;
           }
         });
       },
@@ -753,17 +638,10 @@
       addEntrance() {
 
         if (!this.adding) {
-          // this.clearEntranceForm();
           this.$refs.saveEntranceForm.resetFields();
         }
         this.adding = true;
         this.editing = false;
-
-        // if (this.addEntranceModal) {
-        //   this.addEntranceModal = false;
-        // }
-
-
         this.addEntranceModal = true;
       },
 

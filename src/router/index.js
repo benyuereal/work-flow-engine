@@ -66,7 +66,7 @@ export const otherRouterMap = [
     component: Layout,
     redirect: '/configuration/device',
     children: [{path: 'device',  icon: 'android-apps',title: '服务管理', name: 'device', component: _import('dashboard/slide')},
-      {path: 'service', icon: 'compose',title: '设备管理', name: 'service', component: _import('dashboard/index')}]
+      {path: 'service', icon: 'compose',title: '节点管理', name: 'service', component: _import('dashboard/node.manage')}]
   }
 ];
 

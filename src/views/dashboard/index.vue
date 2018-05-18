@@ -220,6 +220,7 @@
 <script>
   import {mapGetters} from 'vuex'
   import expandRow from './table-expand'
+  import Vue from 'vue'
 
   export default {
     components: {expandRow},
@@ -316,15 +317,17 @@
       displayTableData(entity) {
         var procedureDetails = this.procedureDetails;
         procedureDetails.push({
-          nodeSequence: entity.nodeSequence,
+          nodeSequence: entity.procedureModel[0].nodeSequence,
           procedureConfigId: entity.procedureConfigId,
-          modelType: entity.modelType,
+          modelType: entity.procedureModel[0].nodeName,
           ruleText: entity.ruleText,
           procedureName: entity.procedureName,
           dataVersion: entity.dataVersion,
-          nodeName: entity.nodeName,
-          nodeId: entity.nodeId,
-          nodeType: entity.nodeType,
+          nodeName: entity.procedureModel[0].nodeName,
+          nodeId: entity.procedureModel[0].nodeId,
+          nodeType: entity.procedureModel[0].nodeType,
+          id:entity.id,
+          procedureId:entity.procedureConfigId
         })
         ;
       },
@@ -349,6 +352,11 @@
         // this.getRulesText(entity.procedureRules);
         //展示表格
         this.displayTableData(entity);
+        //选择节点的东西
+        var nodeValue = entity.procedureModel[0].nodeType === 1 ? '1' : '2';
+        this.formItem.select = nodeValue;
+        this.formItem.id=entity.id;
+        this.formItem.procedureConfigId=entity.procedureConfigId;
 
       },
       //确定校验,检验form表单里面的数据
@@ -381,11 +389,7 @@
       saveProcedures() {
         var flag = this.procedureSaveFlag;
         var url;
-        if (flag) {
-          url = "http://localhost:9501/procedure/save";
-        } else {
-          url = "http://localhost:9501/procedure/update";
-        }
+
         var request = JSON.parse(JSON.stringify(this.procedureDetails));
         var nodeMap = new Map();
         this.nodeModelList.forEach(value => {
@@ -395,8 +399,8 @@
         this.nodeModelList.forEach(value => {
           nodeMap.set(value.value, value.label);
         });
-        var procedureConfigId;
-        var id;
+        var procedureConfigId=this.formItem.procedureConfigId;
+        var id=this.formItem.id;
         var procedureName;
         var dataVersion;
         request.forEach(val => {
@@ -405,8 +409,6 @@
           val.modelType = nodeMap.get(val.modelType);
           val.nodeType = val.nodeType == null ? val.modelType : nodeMap.get(val.nodeName);
 
-          procedureConfigId = val.procedureConfigId;
-          id = val.id;
           procedureName = val.procedureName;
           dataVersion = val.dataVersion;
         });
@@ -417,36 +419,22 @@
           //流程之外的其他信息 节点信息
           procedureModel: request,
           dataVersion: dataVersion,
+
         };
         var params = {
           request: JSON.stringify(requestMo),
+          type: flag ? 1 : 2,
         };
-        this.$http.post(
-          url,//请求地址
-          {
-            params//参数
-          },
-          {
-            emulateJSON: true,//是否是json
-          }
-        ).then(function (res) {
-          var data = res.data;
-          var code = data.code;
-          this.warningMessage = data.message;
-          alert(JSON.stringify(data));
+        this.$api.procedureSaveOrUpdate(params).then((response) => {
+          var data = response.data;
+          var code = response.code;
           if (code === 0 || code == 0) {
             //关闭表单
             this.procedureFormDisplayFlag = false;
-            this.$Message.success('Success!');
+            Vue.prototype.$Message.success('Success!');
             //刷新列表
             this.findProcedure();
-          } else {
-            this.$Message.warning(this.warningMessage);
-
           }
-
-        }, function (res) {
-          this.$Message.warning("fail");
 
         });
       },
@@ -471,9 +459,11 @@
 
 
       },
+      getUrlKey: function (name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
+      },
       //寻找流程 根据条件
       findProcedure() {
-
         var pageRequest = this.pageRequest;
         var params = {
           prevPage: pageRequest.prevPage,
@@ -489,35 +479,16 @@
         this.$api.procedureList(params).then((response) => {
           var data = response.data;
           var code = response.code;
-          var message = response.message;
-
           //如果是成功的返回,就会有关于分页的处理
           if (code === 0) {
-            //如果没有任何信息
-            var type = data.type;
-            //如果是有提示，先打印提示
-            if (type === 2) {
-              this.$Message.warning(message);
-            } else {
-              //否则 就讲数据打印到页面上
-              var count = data.count;
-              var tableData = data.procedures;
-              pageRequest.count = count;
-              this.procedureConfigData = tableData;
-            }
-
-          } else {
-            //否则弹出警告，并且在警告上打印出后台返回的信息
-            this.$Message.warning(message);
-
-
+            this.pageRequest.count = data.count;
+            this.procedureConfigData = data.procedures;
           }
+        });
 
 
-        })
-
-
-      },
+      }
+      ,
 
       //增加某个值到弹出框
       addNode() {
@@ -546,7 +517,8 @@
         }, 1000);
 
 
-      },
+      }
+      ,
       getNodeType(nodeType) {
         this.nodeModelList.forEach(value => {
           if (value.value === nodeType) {
@@ -554,7 +526,8 @@
           }
         });
 
-      },
+      }
+      ,
       getNodeTypeByLabel(nodeType) {
         this.nodeModelList.forEach(value => {
           if (value.label === nodeType) {
@@ -562,7 +535,8 @@
           }
         });
 
-      },
+      }
+      ,
 
       //删除弹出框中的某一个值
       removeNode(index) {
@@ -577,11 +551,13 @@
         this.refreshText();
         this.procedureFormDisplayFlag = true;
         this.viewProcedureDetail(index, viewFlag);
-      },
+      }
+      ,
       editProcedure(index) {
         this.procedureSaveFlag = false;
         this.showProcedure(index, false);
-      },
+      }
+      ,
       showRemoveModal(index) {
         this.$Modal.confirm({
           title: '提示',
@@ -592,42 +568,28 @@
           onCancel: () => {
           }
         });
-      },
+      }
+      ,
 
 
       //删除流程
       removeProcedure(index) {
-        var id = this.procedureConfigData[index].id;
-        var url = 'http://localhost:9501/procedure/remove'
         var request = {
-          id: id,
+          id: this.procedureConfigData[index].id,
         }
-        this.$http.post(
-          url,//请求地址
-          {
-            params: JSON.stringify(request)//参数
-          },
-          {
-            emulateJSON: true,//是否是json
-          }
-        ).then(function (res) {
-          var data = res.data;
-          var code = data.code;
-          this.warningMessage = data.message;
+        var params = {
+          request: JSON.stringify(request)
+        };
+        this.$api.procedureRemove(params).then((response) => {
+          var code = response.code;
           if (code === 0 || code == 0) {
-            this.$Message.success('Success!');
+            Vue.prototype.$Message.success('Success!');
             //刷新状态
             this.findProcedure();
-          } else {
-            this.$Message.warning(this.warningMessage);
-
           }
-
-        }, function (res) {
-          this.$Message.warning("fail");
-
         });
-      },
+      }
+      ,
       addProcedure() {
         this.procedureSaveFlag = true;
         this.refreshText();
@@ -966,6 +928,9 @@
               [],
             logicArraySelected:
               [],
+            id:0,
+            procedureConfigId:0,
+
           }
         ,
         //数据校验

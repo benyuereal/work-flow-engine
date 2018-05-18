@@ -18,6 +18,7 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(
+
   response => response,
   error => {
     console.log('err' + error);// for debug

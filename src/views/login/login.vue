@@ -36,8 +36,10 @@
 
 <script>
   import Cookies from 'js-cookie';
+  import axios from 'axios'
+
   export default {
-    data () {
+    data() {
       return {
         form: {
           userName: 'admin',
@@ -54,9 +56,8 @@
       };
     },
     methods: {
-      handleSubmit () {
+      handleSubmit() {
         this.$refs.loginForm.validate((valid) => {
-
           if (valid) {
             if (this.form.password !== "123456") {
               this.$Message.error('密码错误');
@@ -66,6 +67,7 @@
               userName: this.form.userName,
               password: this.form.password,
             }
+
             Cookies.set('userInfo', userInfo);
             this.$store.commit('setUserInfo', userInfo);
             this.$router.push("/");
