@@ -103,8 +103,7 @@
 
     <!--弹出的表单域-->
     <Modal
-      :loading="loading"
-      @on-ok="validateData"
+      @on-ok="validateProcedureData"
       title="流程配置管理"
       v-model="procedureFormDisplayFlag"
       :styles="{top: '20px'}">
@@ -205,14 +204,14 @@
 
         </Row>
       </Form>
-      <div slot="footer">
-        <Button type="primary" size="small" style="width: 60px" @click="procedureFormDisplayFlag = false">取消</Button>
+      <!--<div slot="footer">-->
+      <!--<Button type="primary" size="small" style="width: 60px" @click="procedureFormDisplayFlag = false">取消</Button>-->
 
-        <Button type="primary" size="small" style="width: 60px"
-                @click="validateProcedureData">确定
-        </Button>
-        <!--<Button type="error" size="large" long :loading="" @click="del">Delete</Button>-->
-      </div>
+      <!--<Button type="primary" size="small" style="width: 60px"-->
+      <!--@click="validateProcedureData">确定-->
+      <!--</Button>-->
+      <!--&lt;!&ndash;<Button type="error" size="large" long :loading="" @click="del">Delete</Button>&ndash;&gt;-->
+      <!--</div>-->
     </Modal>
   </div>
 </template>
@@ -221,6 +220,7 @@
   import {mapGetters} from 'vuex'
   import expandRow from './table-expand'
   import Vue from 'vue'
+  import renderU from '../../utils/render'
 
   export default {
     components: {expandRow},
@@ -231,7 +231,6 @@
       }
     },
     created() {
-
       //列表页获取数据
       this.getdata();
       //查询流程配置
@@ -240,25 +239,46 @@
     },
 
     methods: {
-      validateProcedureData() {
-        this.procedureLoading = true;
 
-        //点击增加验证
-        // setTimeout(() => {
-        this.$refs.formItem.validate((valid) => {
-          if (valid) {
-            //校验通过 首先保存数据
-            this.saveProcedures();
-            this.procedureLoading = false;
-          } else {
-            //关闭下面的按钮
-            this.procedureLoading = false;
-            this.$Message.error('缺少信息!');
+      //点击删除 出现弹框
+      removeClick(index) {
+        renderU.removeTip(this, index);
+      },
+      remove(index) {
+        var request = {
+          id: this.procedureConfigData[index].id,
+        }
+        var params = {
+          request: JSON.stringify(request)
+        };
+        this.$api.procedureRemove(params).then((response) => {
+          var code = response.code;
+          if (code === 0 || code == 0) {
+            Vue.prototype.$Message.success('Success!');
+            //刷新状态
+            this.findProcedure();
           }
         });
-        // }, 1000);
-
-
+      },
+      validateProcedureData() {
+        this.procedureLoading = true;
+        //如果是查看的时候显示的面板 就直接隐藏面板
+        if (this.disableFlag) {
+          this.procedureFormDisplayFlag = false;
+        } else {
+          //点击增加验证
+          this.$refs.formItem.validate((valid) => {
+            if (valid) {
+              //校验通过 首先保存数据
+              this.saveProcedures();
+              this.procedureLoading = false;
+            } else {
+              //关闭下面的按钮
+              this.procedureLoading = false;
+              this.$Message.error('缺少信息!');
+            }
+          });
+        }
       },
 
       //初始化最新数组大小
@@ -279,13 +299,14 @@
       }
       ,
       //本方法用来处理展示规则
-      getRulesText(content) {
+      getRulesText(entity) {
+
 
         var ruleArray = [];
         //按照
-        ruleArray = content.split(' ');
-        var logicArray = this.logicArray;
-        var checkArray = this.checkArray;
+        ruleArray = entity.ruleText.split(' ');
+        var logicArray = entity.procedureModel[0].logicArray;
+        var checkArray = entity.procedureModel[0].checkArray;
         //上面两个数组用来承载
         //首先是从 规则校验中筛选出被选中的内容
         checkArray.forEach(value => {
@@ -309,14 +330,14 @@
           })
         });
         //然后将所有内容展示到面板上面
-        this.ruleText = content;
+        this.ruleText = entity.ruleText;
         this.initLatestArray();
 
 
       },
       displayTableData(entity) {
-        var procedureDetails = this.procedureDetails;
-        procedureDetails.push({
+
+        this.procedureDetails.push({
           nodeSequence: entity.procedureModel[0].nodeSequence,
           procedureConfigId: entity.procedureConfigId,
           modelType: entity.procedureModel[0].nodeName,
@@ -326,10 +347,12 @@
           nodeName: entity.procedureModel[0].nodeName,
           nodeId: entity.procedureModel[0].nodeId,
           nodeType: entity.procedureModel[0].nodeType,
-          id:entity.id,
-          procedureId:entity.procedureConfigId
+          id: entity.id,
+          procedureId: entity.procedureConfigId
         })
         ;
+        //然后分析逻辑多选和
+        this.getRulesText(entity);
       },
       //根据流程配置ID和节点来查询
       viewProcedureDetail(index, viewFlag) {
@@ -348,15 +371,13 @@
 
         this.formItem.logicArraySelected = entity.procedureModel[0].logicArray;
         this.ruleText = entity.ruleText;
-        //然后分析逻辑多选和
-        // this.getRulesText(entity.procedureRules);
         //展示表格
         this.displayTableData(entity);
         //选择节点的东西
         var nodeValue = entity.procedureModel[0].nodeType === 1 ? '1' : '2';
         this.formItem.select = nodeValue;
-        this.formItem.id=entity.id;
-        this.formItem.procedureConfigId=entity.procedureConfigId;
+        this.formItem.id = entity.id;
+        this.formItem.procedureConfigId = entity.procedureConfigId;
 
       },
       //确定校验,检验form表单里面的数据
@@ -399,8 +420,8 @@
         this.nodeModelList.forEach(value => {
           nodeMap.set(value.value, value.label);
         });
-        var procedureConfigId=this.formItem.procedureConfigId;
-        var id=this.formItem.id;
+        var procedureConfigId = this.formItem.procedureConfigId;
+        var id = this.formItem.id;
         var procedureName;
         var dataVersion;
         request.forEach(val => {
@@ -431,9 +452,13 @@
           if (code === 0 || code == 0) {
             //关闭表单
             this.procedureFormDisplayFlag = false;
+            //如果不是展示操作 就不提示，也不刷新表格
+
             Vue.prototype.$Message.success('Success!');
             //刷新列表
             this.findProcedure();
+
+
           }
 
         });
@@ -548,7 +573,7 @@
 
       //点击显示选框
       showProcedure(index, viewFlag) {
-        this.refreshText();
+        // this.refreshText();
         this.procedureFormDisplayFlag = true;
         this.viewProcedureDetail(index, viewFlag);
       }
@@ -572,24 +597,6 @@
       ,
 
 
-      //删除流程
-      removeProcedure(index) {
-        var request = {
-          id: this.procedureConfigData[index].id,
-        }
-        var params = {
-          request: JSON.stringify(request)
-        };
-        this.$api.procedureRemove(params).then((response) => {
-          var code = response.code;
-          if (code === 0 || code == 0) {
-            Vue.prototype.$Message.success('Success!');
-            //刷新状态
-            this.findProcedure();
-          }
-        });
-      }
-      ,
       addProcedure() {
         this.procedureSaveFlag = true;
         this.refreshText();
@@ -906,7 +913,7 @@
                     },
                     on: {
                       click: () => {
-                        this.showRemoveModal(params.index)
+                        this.removeClick(params.index)
                       }
                     }
                   }, '删除')
@@ -928,8 +935,8 @@
               [],
             logicArraySelected:
               [],
-            id:0,
-            procedureConfigId:0,
+            id: 0,
+            procedureConfigId: 0,
 
           }
         ,

@@ -138,6 +138,38 @@ const entranceBindProcedure = params => {
   })
 }
 
+const nodeList = params => {
+  return fetch({
+    url: `/nodeManager/nodeList`,
+    method: 'get',
+    params: params
+  })
+}
+
+const nodeDetail = params => {
+  return fetch({
+    url: `/nodeManager/getNodeDetail`,
+    method: 'post',
+    params: params
+  })
+}
+
+
+const nodeRemove = params => {
+  return fetch({
+    url: `/nodeManager/removeNode`,
+    method: 'post',
+    params: params
+  })
+}
+
+const nodeSave = params => {
+  return fetch({
+    url: `nodeManager/nodeSave`,
+    method: 'post',
+    params: params
+  })
+}
 const apiList = {
   procedureList,
   articleList,
@@ -152,7 +184,12 @@ const apiList = {
   procedureByEntranceId,
   procedureSaveOrUpdate,
   procedureRemove,
-  entranceBindProcedure
+  entranceBindProcedure,
+  nodeList,
+  nodeDetail,
+  nodeRemove,
+  nodeSave,
+
 }
 
 export default apiList

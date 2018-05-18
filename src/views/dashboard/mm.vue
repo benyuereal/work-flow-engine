@@ -117,9 +117,9 @@
     <Modal
       title="入口信息配置"
       v-model="addEntranceModal"
-      :styles="{top: '20px'}">
+      :styles="{top: '20px'}" @on-ok="validateEntranceData('saveEntranceForm')" :loading="entranceLoading">
       <Form ref="saveEntranceForm" :model="saveEntranceForm" :label-width="0" label-position="left"
-            :rules="validateEntranceForm">
+            :rules="validateEntranceForm" >
         <FormItem label="入口名称" prop="entranceName">
           <Input v-model="saveEntranceForm.entranceName" placeholder="Enter something..."></Input>
         </FormItem>
@@ -181,19 +181,11 @@
 
 
       </Form>
-      <div slot="footer">
-        <Button type="primary" size="small" style="width: 60px" @click="cancelEdit">取消</Button>
-
-        <Button type="primary" size="small" style="width: 60px" :loading="entranceLoading"
-                @click="validateEntranceData">确定
-        </Button>
-        <!--<Button type="error" size="large" long :loading="" @click="del">Delete</Button>-->
-      </div>
     </Modal>
     <Modal
       title="入口信息绑定流程"
       v-model="bindEntranceModal"
-      :styles="{top: '150px'}">
+      :styles="{top: '150px'}"  @on-ok="entranceBindProcedure">
       <Form :model="bindForm" :label-width="0" label-position="left">
 
         <FormItem label="入口选择">
@@ -212,14 +204,7 @@
 
 
       </Form>
-      <div slot="footer">
-        <Button type="primary" size="small" style="width: 60px" @click="bindEntranceModal = false">取消</Button>
 
-        <Button type="primary" size="small" style="width: 60px" :loading="entranceLoading"
-                @click="entranceBindProcedure">确定
-        </Button>
-        <!--<Button type="error" size="large" long :loading="" @click="del">Delete</Button>-->
-      </div>
     </Modal>
   </div>
 </template>
@@ -229,6 +214,7 @@
   import expandRow from './table-expand';
   import city from '../../utils/city'
   import Vue from 'vue'
+  import renderU from '../../utils/render'
 
   export default {
     components: {expandRow},
@@ -248,25 +234,10 @@
     },
 
     methods: {
-      cancelEdit: function () {
-        this.addEntranceModal = false;
-        this.$refs.saveEntranceForm.resetFields();
-
+      removeClick(index){
+        renderU.removeTip(this,index);
       },
-      showRemoveModal(index) {
-        this.$Modal.confirm({
-          title: '提示',
-          content: '<p>删除此条记录,是否继续?</p>',
-          onOk: () => {
-            this.removeEntrance(index);
-          },
-          onCancel: () => {
-          }
-        });
-      },
-
-      //删除入口
-      removeEntrance(index) {
+      remove(index){
         var id = this.entranceData[index].id;
         var request = {
           id: id,
@@ -281,6 +252,13 @@
           }
         });
       },
+      cancelEdit: function () {
+        this.addEntranceModal = false;
+        this.$refs.saveEntranceForm.resetFields();
+
+      },
+
+
       entranceBindProcedure() {
 
         var params = this.bindForm;
@@ -411,23 +389,27 @@
         this.getEntranceData();
       },
 
-      validateEntranceData() {
-
+      validateEntranceData(name) {
         //点击增加验证
-        this.$refs.saveEntranceForm.validate((valid) => {
+        this.$refs[name].validate((valid) => {
           if (valid) {
+            this.changeLoading();
             //校验通过 首先保存数据
             this.saveEntrance();
           } else {
-            //关闭下面的按钮
-            this.entranceLoading = false;
 
             Vue.prototype.$Message.error('缺少信息!');
+            return this.changeLoading();
           }
         });
 
       },
-
+      changeLoading() {
+        this.entranceLoading = false;
+        this.$nextTick(() => {
+          this.entranceLoading = true;
+        });
+      },
       //保存入口信息
       saveEntrance: function () {
         //首先将城市名字找到
@@ -457,6 +439,7 @@
           if (code === 0) {
             //关闭表单
             this.addEntranceModal = false;
+            this.entranceLoading=true;
             Vue.prototype.$Message.success("success");
             //刷新表格
             this.getEntranceData();
@@ -691,7 +674,7 @@
         //表单是否被编辑中
         editing: false,
         warningMessage: '',
-        entranceLoading: false,
+        entranceLoading: true,
         //控制结果返回状态
         validateStatus: false,
         validateEntranceFormAlive: null,
@@ -902,7 +885,7 @@
                   },
                   on: {
                     click: () => {
-                      this.showRemoveModal(params.index)
+                      this.removeClick(params.index)
                     }
                   }
                 }, '删除'),
