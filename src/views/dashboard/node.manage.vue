@@ -215,16 +215,20 @@
         ],
         statusList: [
           {
-            value: 1,
+            value: 0,
             label: '全部'
           },
           {
-            value: 2,
+            value: 1,
             label: '有效'
           },
+          // {
+          //   value: 2,
+          //   label: '无效'
+          // },
           {
             value: 3,
-            label: '无效'
+            label: '删除'
           }
         ],
         data1: [],

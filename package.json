@@ -20,6 +20,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "screenfull": "3.2.2",
+    "vddl": "^0.7.1",
     "vue": "2.4.2",
     "vue-drag-and-drop-list": "^1.0.0",
     "vue-i18n": "^7.6.0",

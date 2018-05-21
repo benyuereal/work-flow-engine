@@ -112,97 +112,97 @@
           <Input v-model="formItem.procedureName" placeholder="Enter something..." clearable
                  :disabled="disableFlag"></Input>
         </FormItem>
-        <FormItem label="节点模板选择" prop="select">
-          <Select v-model="formItem.select" style="float: top" :disabled="disableFlag">
-            <!--<Option value="1">提单</Option>-->
-            <!--<Option value="2">审核</Option>-->
-            <Option v-for="item in nodeModelList" :value="item.value" :key="item.value" style="width: 100%">{{
-              item.label }}
-            </Option>
+        <!--<FormItem label="节点模板选择" prop="select">-->
+          <!--<Select v-model="formItem.select" style="float: top" :disabled="disableFlag">-->
+            <!--&lt;!&ndash;<Option value="1">提单</Option>&ndash;&gt;-->
+            <!--&lt;!&ndash;<Option value="2">审核</Option>&ndash;&gt;-->
+            <!--<Option v-for="item in nodeModelList" :value="item.value" :key="item.value" style="width: 100%">{{-->
+              <!--item.label }}-->
+            <!--</Option>-->
 
-          </Select>
-        </FormItem>
-
-        <FormItem label="规则模板选择:">
-          <Row style="height: 20px">
-            <Col span="11">
-            </Col>
-            <Col span="2" style="text-align: center">&nbsp;</Col>
-            <Col span="11">
-            </Col>
-          </Row>
-        </FormItem>
-        <!--<FormItem style="border-left: black;border-bottom:1px solid black;border-top:1px solid black;">-->
-        <Row style="height: 29px;">
-          <Col span="1" style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;height: 100%">&nbsp;
-          </Col>
-          <Col span="6"
-               style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;text-align: center;border-right: 1px solid gainsboro;border-left: gainsboro; margin-top: 0px;height: 100%">
-            <p>模板名称</p>
-          </Col>
-          <Col span="5"
-               style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;text-align: center;border-right: 1px solid gainsboro;border-left: gainsboro;height: 100%">
-            <p>模板关系选择</p>
-          </Col>
-          <Col span="12"
-               style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;text-align: center;border-left: gainsboro;height: 100%">
-            <p>包含规则</p>
-          </Col>
-        </Row>
+          <!--</Select>-->
         <!--</FormItem>-->
-        <!--<FormItem style="border-bottom:1px solid black;">-->
-        <Row style="height: 120px">
-          <Col span="1" style="border-bottom: 1px solid gainsboro;height: 100%">
-            <!--<Icon type="refresh" style="margin-top: 40px;size: 90px"></Icon>-->
-          </Col>
-          <Col span="6" style="border-bottom: 1px solid gainsboro;border-right: 1px solid gainsboro;height: 100%">
 
-            <CheckboxGroup v-model="formItem.checkArraySelected"
-                           style="text-align: left; margin-left: 20px;margin-top: 20px"
-                           prop="checkArraySelected" @on-change="changeCheckOrLogic">
-              <Checkbox v-for="item in checkArray" :label="item" :disabled="disableFlag">{{ item }}</Checkbox>
-            </CheckboxGroup>
-          </Col>
-          <Col span="5" style="border-bottom: 1px solid gainsboro;border-right: 1px solid gainsboro;height: 100%">
+        <!--<FormItem label="规则模板选择:">-->
+          <!--<Row style="height: 20px">-->
+            <!--<Col span="11">-->
+            <!--</Col>-->
+            <!--<Col span="2" style="text-align: center">&nbsp;</Col>-->
+            <!--<Col span="11">-->
+            <!--</Col>-->
+          <!--</Row>-->
+        <!--</FormItem>-->
+        <!--&lt;!&ndash;<FormItem style="border-left: black;border-bottom:1px solid black;border-top:1px solid black;">&ndash;&gt;-->
+        <!--<Row style="height: 29px;">-->
+          <!--<Col span="1" style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;height: 100%">&nbsp;-->
+          <!--</Col>-->
+          <!--<Col span="6"-->
+               <!--style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;text-align: center;border-right: 1px solid gainsboro;border-left: gainsboro; margin-top: 0px;height: 100%">-->
+            <!--<p>模板名称</p>-->
+          <!--</Col>-->
+          <!--<Col span="5"-->
+               <!--style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;text-align: center;border-right: 1px solid gainsboro;border-left: gainsboro;height: 100%">-->
+            <!--<p>模板关系选择</p>-->
+          <!--</Col>-->
+          <!--<Col span="12"-->
+               <!--style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;text-align: center;border-left: gainsboro;height: 100%">-->
+            <!--<p>包含规则</p>-->
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--&lt;!&ndash;</FormItem>&ndash;&gt;-->
+        <!--&lt;!&ndash;<FormItem style="border-bottom:1px solid black;">&ndash;&gt;-->
+        <!--<Row style="height: 120px">-->
+          <!--<Col span="1" style="border-bottom: 1px solid gainsboro;height: 100%">-->
+            <!--&lt;!&ndash;<Icon type="refresh" style="margin-top: 40px;size: 90px"></Icon>&ndash;&gt;-->
+          <!--</Col>-->
+          <!--<Col span="6" style="border-bottom: 1px solid gainsboro;border-right: 1px solid gainsboro;height: 100%">-->
 
-            <CheckboxGroup v-model="formItem.logicArraySelected"
-                           style="text-align: left;margin-left: 30px;margin-top: 20px"
-                           @on-change="changeCheckOrLogic" prop="logicArraySelected" disabled="disableFlag">
-              <Checkbox v-for="item in logicArray" :label="item" :disabled="disableFlag">{{ item }}</Checkbox>
+            <!--<CheckboxGroup v-model="formItem.checkArraySelected"-->
+                           <!--style="text-align: left; margin-left: 20px;margin-top: 20px"-->
+                           <!--prop="checkArraySelected" @on-change="changeCheckOrLogic">-->
+              <!--<Checkbox v-for="item in checkArray" :label="item" :disabled="disableFlag">{{ item }}</Checkbox>-->
+            <!--</CheckboxGroup>-->
+          <!--</Col>-->
+          <!--<Col span="5" style="border-bottom: 1px solid gainsboro;border-right: 1px solid gainsboro;height: 100%">-->
 
-
-            </CheckboxGroup>
-          </Col>
-          <Col span="12" id="resultDisplayArea"
-               style="border-bottom: 1px solid gainsboro;height: 100%;text-align: center;
-                 ">
-            <div style="width: 100%;height: 30%;float: top;margin-top: 20px" :disabled="disableFlag">
-              {{ruleText}}
-            </div>
-            <div style="width: 100%;height: 50%;float: top;margin-top:20px">
-              <Button type="dashed" shape="circle" icon="refresh"
-                      @click="refreshText" style="" :disabled="disableFlag"></Button>
-              <!--<Icon type="chevron-down"></Icon>-->
-              <Button type="dashed" shape="circle" icon="checkmark" @click="addNode" :disabled="disableFlag"></Button>
-            </div>
-
-          </Col>
-        </Row>
-        <Row style="height: 30px">
-          <Col span="4">&nbsp;<p>流程配置管理</p></Col>
-          <!--<Col span="24" style="height: 50px">&nbsp;</Col>-->
-          <Col span="10"></Col>
-          <Col span="7">&nbsp;</Col>
-
-        </Row>
-        <Row>
-          <Col span="24">
-            <Table id="fuckThis" style="background: white" border :columns="columnsProcedure"
-                   :data="procedureDetails" :disabled="disableFlag"></Table>&nbsp;
-          </Col>
+            <!--<CheckboxGroup v-model="formItem.logicArraySelected"-->
+                           <!--style="text-align: left;margin-left: 30px;margin-top: 20px"-->
+                           <!--@on-change="changeCheckOrLogic" prop="logicArraySelected" disabled="disableFlag">-->
+              <!--<Checkbox v-for="item in logicArray" :label="item" :disabled="disableFlag">{{ item }}</Checkbox>-->
 
 
-        </Row>
+            <!--</CheckboxGroup>-->
+          <!--</Col>-->
+          <!--<Col span="12" id="resultDisplayArea"-->
+               <!--style="border-bottom: 1px solid gainsboro;height: 100%;text-align: center;-->
+                 <!--">-->
+            <!--<div style="width: 100%;height: 30%;float: top;margin-top: 20px" :disabled="disableFlag">-->
+              <!--{{ruleText}}-->
+            <!--</div>-->
+            <!--<div style="width: 100%;height: 50%;float: top;margin-top:20px">-->
+              <!--<Button type="dashed" shape="circle" icon="refresh"-->
+                      <!--@click="refreshText" style="" :disabled="disableFlag"></Button>-->
+              <!--&lt;!&ndash;<Icon type="chevron-down"></Icon>&ndash;&gt;-->
+              <!--<Button type="dashed" shape="circle" icon="checkmark" @click="addNode" :disabled="disableFlag"></Button>-->
+            <!--</div>-->
+
+          <!--</Col>-->
+        <!--</Row>-->
+        <!--<Row style="height: 30px">-->
+          <!--<Col span="4">&nbsp;<p>流程配置管理</p></Col>-->
+          <!--&lt;!&ndash;<Col span="24" style="height: 50px">&nbsp;</Col>&ndash;&gt;-->
+          <!--<Col span="10"></Col>-->
+          <!--<Col span="7">&nbsp;</Col>-->
+
+        <!--</Row>-->
+        <!--<Row>-->
+          <!--<Col span="24">-->
+            <!--<Table id="fuckThis" style="background: white" border :columns="columnsProcedure"-->
+                   <!--:data="procedureDetails" :disabled="disableFlag"></Table>&nbsp;-->
+          <!--</Col>-->
+
+
+        <!--</Row>-->
       </Form>
       <!--<div slot="footer">-->
       <!--<Button type="primary" size="small" style="width: 60px" @click="procedureFormDisplayFlag = false">取消</Button>-->

@@ -50,7 +50,7 @@ export default function fetch(options) {
     // http response 拦截器
     instance.interceptors.response.use(
       response => {
-        console.log(JSON.stringify(response));
+        console.log(JSON.stringify(response.data));
         //判断是否是过期 如果是过期(302重定向) 就刷新页面
         var result = response.data;
         var code = result.code, data = result.data, message = result.message;
@@ -61,14 +61,14 @@ export default function fetch(options) {
           var type = data.type;
           if (type === 'undefined') {
           } else if (type === 2) {
-            Message.warning(message==='undefined'?'未知原因，请联系管理员':message);
+            Message.warning(message);
           } else {
           }
 
 
         } else {
           //其他情况 就需要弹出
-          Message.warning(message==='undefined'?'未知原因，请联系管理员':message);
+          Message.warning(message);
         }
         iView.LoadingBar.finish()
         return response

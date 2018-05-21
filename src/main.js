@@ -18,6 +18,11 @@ import {Message,} from 'iview';
 import VueI18n from 'vue-i18n';
 import usLang from 'iview/src/locale/lang/en-US';
 import cnLang from 'iview/src/locale/lang/zh-CN';
+import Vddl from 'vddl';
+import Draggable from 'vuedraggable'
+
+Vue.use(Draggable);
+Vue.use(Vddl);
 Vue.use(VueI18n);
 Vue.use(api);
 Vue.use(vueDragAndDropList);

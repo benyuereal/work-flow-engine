@@ -157,27 +157,42 @@
 
           </CheckboxGroup>
         </FormItem>
-        <FormItem label="商品类型" prop="goodsType">
-          <Select v-model="saveEntranceForm.goodsType" @on-change="findGoodsLine(1)">
-            <Option v-for="item in goodsType" :value="item.value" :key="item.value">{{ item.label }}
-            </Option>
 
-          </Select>
-        </FormItem>
-        <FormItem label="商品线" prop="goodsLine">
-          <Select v-model="saveEntranceForm.goodsLine" @on-change="findGoodsLine(2)">
-            <Option v-for="item in goodsLine" :value="item.value" :key="item.value">{{ item.label }}
-            </Option>
 
-          </Select>
-        </FormItem>
-        <FormItem label="商品单元" prop="goodsUnit">
-          <Select v-model="saveEntranceForm.goodsUnit">
-            <Option v-for="item in goodsUnit" :value="item.value" :key="item.value">{{ item.label }}
-            </Option>
+        <FormItem>
+          <Row>
+          <Col span="8">
+            <FormItem label="商品类型" prop="goodsType">
+              <Select v-model="saveEntranceForm.goodsType" @on-change="findGoodsLine(1)">
+                <Option v-for="item in goodsType" :value="item.value" :key="item.value">{{ item.label }}
+                </Option>
 
-          </Select>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+
+            <FormItem label="商品线" prop="goodsLine">
+              <Select v-model="saveEntranceForm.goodsLine" @on-change="findGoodsLine(2)">
+                <Option v-for="item in goodsLine" :value="item.value" :key="item.value">{{ item.label }}
+                </Option>
+
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="商品单元" prop="goodsUnit">
+              <Select v-model="saveEntranceForm.goodsUnit">
+                <Option v-for="item in goodsUnit" :value="item.value" :key="item.value">{{ item.label }}
+                </Option>
+
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
         </FormItem>
+
+
 
 
       </Form>
@@ -211,7 +226,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import expandRow from './table-expand';
+  import expandRow from '../expand/entrance-expande';
   import city from '../../utils/city'
   import Vue from 'vue'
   import renderU from '../../utils/render'

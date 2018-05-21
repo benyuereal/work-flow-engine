@@ -27,7 +27,7 @@ var config = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    baseServerUrl: 'http://localhost:9501/',
+    baseServerUrl: 'http://10.252.55.42:9501/',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
