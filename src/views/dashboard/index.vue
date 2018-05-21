@@ -20,7 +20,7 @@
                    style="width: 100%"></Input>
           </Col>
           <Col span="5" id="select-column-state">
-            <Select v-model="state" style="width:100%" placeholder="状态：">
+            <Select v-model="state" placeholder="状态：" style="width:100%" >
               <Option v-for="item in stateType" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </Col>
@@ -254,7 +254,7 @@
         this.$api.procedureRemove(params).then((response) => {
           var code = response.code;
           if (code === 0 || code == 0) {
-            Vue.prototype.$Message.success('Success!');
+            this.$Message.success('Success!');
             //刷新状态
             this.findProcedure();
           }
@@ -391,10 +391,6 @@
             //关闭表单
             this.procedureFormDisplayFlag = false;
             this.$Message.success('Success!');
-          } else {
-            this.$Message.error('Fail!');
-            this.loading = false;
-
           }
 
         } else {
@@ -454,7 +450,7 @@
             this.procedureFormDisplayFlag = false;
             //如果不是展示操作 就不提示，也不刷新表格
 
-            Vue.prototype.$Message.success('Success!');
+            this.$Message.success('Success!');
             //刷新列表
             this.findProcedure();
 

@@ -22,6 +22,7 @@
     "screenfull": "3.2.2",
     "vue": "2.4.2",
     "vue-drag-and-drop-list": "^1.0.0",
+    "vue-i18n": "^7.6.0",
     "vue-js-grid": "^1.0.1",
     "vue-jsonp": "^0.1.8",
     "vue-resource": "^1.5.0",

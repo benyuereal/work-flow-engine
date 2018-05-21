@@ -5,14 +5,16 @@ import {SERVER_BASE_URL} from './config'
 import router from 'vue-router'
 import util from '../utils/util'
 // import router from '@/router'
-import iView, {Notice} from 'iview'
+import iView, {Notice,Message} from 'iview'
+Vue.prototype.$Message = Message
+Vue.use(iView);
+
 // import store from '@/store'
-Vue.use(iView)
+
 // 设置用户信息action
 /* const setUserInfo = function (user) {
  //store.dispatch(SET_USER_INFO, user)
  }; */
-import message from 'iview'
 
 export default function fetch(options) {
   /*
@@ -59,14 +61,14 @@ export default function fetch(options) {
           var type = data.type;
           if (type === 'undefined') {
           } else if (type === 2) {
-            Vue.prototype.$Message.warning(message);
+            Message.warning(message==='undefined'?'未知原因，请联系管理员':message);
           } else {
           }
 
 
         } else {
           //其他情况 就需要弹出
-          Vue.prototype.$Message.warning(message);
+          Message.warning(message==='undefined'?'未知原因，请联系管理员':message);
         }
         iView.LoadingBar.finish()
         return response

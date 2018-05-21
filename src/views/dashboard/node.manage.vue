@@ -391,7 +391,7 @@
         this.$api.nodeRemove(requestStr).then((response) => {
           // 返回数据 json， 返回的数据就是json格式
           if (response.code === 0) {
-            Vue.prototype.$Message.success('Success!');
+            this.$Message.success('Success!');
 
           }
           console.log(response)
@@ -408,7 +408,7 @@
         this.$api.nodeRemove(requestStr).then((response) => {
           // 返回数据 json， 返回的数据就是json格式
           if (response.code === 0) {
-            Vue.prototype.$Message.success('Success!');
+            this.$Message.success('Success!');
 
           }
           //刷新表格
@@ -437,7 +437,7 @@
             this.$api.nodeSave(requestStr).then((response) => {
               // 返回数据 json， 返回的数据就是json格式
               if (response.code === 0) {
-                Vue.prototype.$Message.success('Success!');
+                this.$Message.success('Success!');
                 this.modalSave = false;
                 this.saveLoading = true;
                 this.refreshView();

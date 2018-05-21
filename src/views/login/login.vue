@@ -37,6 +37,7 @@
 <script>
   import Cookies from 'js-cookie';
   import axios from 'axios'
+  import Vue from 'vue'
 
   export default {
     data() {

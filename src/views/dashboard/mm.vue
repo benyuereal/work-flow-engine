@@ -246,7 +246,7 @@
           var data = response.data;
           var code = response.code;
           if (code === 0 || code == 0) {
-            Vue.prototype.$Message.success("success");
+            this.$Message.success("success");
             //刷新表格
             this.getEntranceData();
           }
@@ -269,7 +269,7 @@
           var code = response.code;
           //如果是成功的返回,就会有关于分页的处理
           if (code === 0&&data.type===0) {
-            Vue.prototype.$Message.success("success");
+            this.$Message.success("success");
             //刷新列V表页
             this.getEntranceData();
             //隐藏
@@ -398,7 +398,7 @@
             this.saveEntrance();
           } else {
 
-            Vue.prototype.$Message.error('缺少信息!');
+            this.$Message.error('缺少信息!');
             return this.changeLoading();
           }
         });
@@ -429,7 +429,7 @@
           if (code === 0) {
             //关闭表单
             this.addEntranceModal = false;
-            Vue.prototype.$Message.success("success");
+            this.$Message.success("success");
             //刷新表格
             this.getEntranceData();
           }
@@ -440,7 +440,7 @@
             //关闭表单
             this.addEntranceModal = false;
             this.entranceLoading=true;
-            Vue.prototype.$Message.success("success");
+            this.$Message.success("success");
             //刷新表格
             this.getEntranceData();
           }
