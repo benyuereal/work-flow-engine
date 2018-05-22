@@ -407,37 +407,31 @@
         var flag = this.procedureSaveFlag;
         var url;
 
-        var request = JSON.parse(JSON.stringify(this.procedureDetails));
-        var nodeMap = new Map();
-        this.nodeModelList.forEach(value => {
-          nodeMap.set(value.label, value.value);
-        });
-        var nodeMapForValue = new Map();
-        this.nodeModelList.forEach(value => {
-          nodeMap.set(value.value, value.label);
-        });
-        var procedureConfigId = this.formItem.procedureConfigId;
-        var id = this.formItem.id;
-        var procedureName;
-        var dataVersion;
-        request.forEach(val => {
-          val.nodeName = val.nodeName == null ? val.modelType : val.nodeName;
-
-          val.modelType = nodeMap.get(val.modelType);
-          val.nodeType = val.nodeType == null ? val.modelType : nodeMap.get(val.nodeName);
-
-          procedureName = val.procedureName;
-          dataVersion = val.dataVersion;
-        });
-        var requestMo = {
-          id: id,
-          procedureName: procedureName,
-          procedureConfigId: procedureConfigId == null ? 0 : procedureConfigId,
-          //流程之外的其他信息 节点信息
-          procedureModel: request,
-          dataVersion: dataVersion,
-
-        };
+        // var request = JSON.parse(JSON.stringify(this.procedureDetails));
+        // var nodeMap = new Map();
+        // this.nodeModelList.forEach(value => {
+        //   nodeMap.set(value.label, value.value);
+        // });
+        // var nodeMapForValue = new Map();
+        // this.nodeModelList.forEach(value => {
+        //   nodeMap.set(value.value, value.label);
+        // });
+        // var procedureConfigId = this.formItem.procedureConfigId;
+        // var id = this.formItem.id;
+        // var procedureName;
+        // var dataVersion;
+        // request.forEach(val => {
+        //   val.nodeName = val.nodeName == null ? val.modelType : val.nodeName;
+        //
+        //   val.modelType = nodeMap.get(val.modelType);
+        //   val.nodeType = val.nodeType == null ? val.modelType : nodeMap.get(val.nodeName);
+        //
+        //   procedureName = val.procedureName;
+        //   dataVersion = val.dataVersion;
+        // });
+        // var id=formItem.id;
+        // var procedureName=f
+        var requestMo = this.formItem;
         var params = {
           request: JSON.stringify(requestMo),
           type: flag ? 1 : 2,
@@ -445,7 +439,7 @@
         this.$api.procedureSaveOrUpdate(params).then((response) => {
           var data = response.data;
           var code = response.code;
-          if (code === 0 || code == 0) {
+          if (code === 0) {
             //关闭表单
             this.procedureFormDisplayFlag = false;
             //如果不是展示操作 就不提示，也不刷新表格
@@ -680,6 +674,7 @@
         state: 0,//默认选出全部状态
 
         //流程保存标志位
+        //1保存 2 更新
         procedureSaveFlag: true,
         procedureLoading: false,
 

@@ -34,11 +34,11 @@
     </Row>
     <Row>
       <!--<Col span="8">-->
-        <!--&nbsp;-->
+      <!--&nbsp;-->
       <!--</Col>-->
       <Col span="24">
         <span class="expand-key">节点规则: </span>
-        <Button type="primary" @click="addNodeFlag=!addNodeFlag">add</Button>
+        <Button type="primary" @click="addNodeFlag=!addNodeFlag" style="float: right;width: 56px">add</Button>
 
         <div style="margin-top: 20px"></div>
 
@@ -52,7 +52,7 @@
 
 
           <draggable v-for="people in processes" :options="{group:people.nodeType}">
-            <Button type="dashed">{{people.nodeType===1?'提单:':'审核:'}}</Button>
+            <span type="dashed">{{people.nodeType===1?'提单:':'审核:'}}</span>
             <Button v-for="element in people.rule" :type="element.type" :icon="element.icon"
                     style="margin-left: 4px;margin-right: 4px">
               {{element.name}}
@@ -71,53 +71,54 @@
     </Row>
     <Modal
       v-model="addNodeFlag"
-      title="节点规则管理" @on-ok="saveNode(girl)" :style="width='600px'">
+      title="节点规则管理" @on-ok="saveRule(girl)" :style="width='600px'" :loading="editingLoading">
       <Form :label-width="0" label-position="left">
 
-      <div>
-        <FormItem label="入口名称" prop="entranceName">
-        <Select v-model="nodeType" style="float: top" :disabled="disableFlag">
-          <!--<Option value="1">提单</Option>-->
-          <!--<Option value="2">审核</Option>-->
-          <Option v-for="item in nodeModelList" :value="item.value" :key="item.value" style="width: 100%">{{
-            item.label }}
-          </Option>
+        <div>
+          <FormItem label="节点选择" :rules="{required: true, message: '请选择节点', trigger: 'change'}">
+            <Select v-model="nodeType" style="float: top">
+              <!--<Option value="1">提单</Option>-->
+              <!--<Option value="2">审核</Option>-->
+              <Option v-for="item in nodeModelList" :value="item.value" :key="item.value" style="width: 100%">{{
+                item.label }}
+              </Option>
 
-        </Select>
-        </FormItem>
-        <Tooltip content="点击按钮 增加逻辑区域按钮" placement="right">
-          <Button v-for="element in logicSet" @click="fuck(element)" :type="element.type" :icon="element.icon"
-                  style="margin-left: 4px;margin-right: 4px">
-            {{element.name}}
-          </Button>
-        </Tooltip>
-      </div>
-      <div style="margin-top: 40px">
+            </Select>
+          </FormItem>
+          <Tooltip content="点击按钮 增加逻辑区域按钮" placement="right">
+            <Button v-for="element in logicSet" @click="fuck(element)" :type="element.type" :icon="element.icon"
+                    style="margin-left: 4px;margin-right: 4px">
+              {{element.name}}
+            </Button>
+          </Tooltip>
+        </div>
+        <div style="margin-top: 40px">
 
-      </div>
-      <div>
-        <!--  -->
-        <draggable v-model="fruit" :options="{group:'people'}">
-          <Button v-for="element in fruit" :type="element.type" :icon="element.icon"
-                  style="margin-left: 4px;margin-right: 4px">
-            {{element.name}}
-          </Button>
-        </draggable>
+        </div>
+        <div>
 
-        <br>
-        <br>
-        <draggable v-model="girl" :options="{group:'people'}">
-          <Button v-for="element in girl" @click="removeLogic(element)" :type="element.type" :icon="element.icon"
-                  style="margin-left: 4px;margin-right: 4px">
-            {{element.name}}
-          </Button>
-        </draggable>
-        <br>
-        <!--<draggable  v-model="logicSet" :options="{group:['human']}">-->
-        <!--<Button v-for="element in logicSet" >{{element}}</Button>-->
-        <!--</draggable>-->
-        <!--{{logicSet}}-->
-      </div>
+          <!--  -->
+          <draggable v-model="fruit" :options="{group:'people'}">
+            <Button v-for="element in fruit" :type="element.type" :icon="element.icon"
+                    style="margin-left: 4px;margin-right: 4px">
+              {{element.name}}
+            </Button>
+          </draggable>
+
+          <br>
+          <br>
+          <draggable v-model="girl" :options="{group:'people'}">
+            <Button v-for="element in girl" @click="removeLogic(element)" :type="element.type" :icon="element.icon"
+                    style="margin-left: 4px;margin-right: 4px;border-radius: 0px">
+              {{element.name}}
+            </Button>
+          </draggable>
+          <br>
+          <!--<draggable  v-model="logicSet" :options="{group:['human']}">-->
+          <!--<Button v-for="element in logicSet" >{{element}}</Button>-->
+          <!--</draggable>-->
+          <!--{{logicSet}}-->
+        </div>
       </Form>
     </Modal>
   </div>
@@ -151,6 +152,7 @@
           var entity = this.logicMap.get(value1);
           if (entity != null) {
             ruleEntity.rule.push(entity);
+            ruleEntity.nodeType = value.nodeType;
           }
         });
         this.processes.push(ruleEntity);
@@ -169,9 +171,9 @@
         logicMap: new Map(),
         ruleMap: new Map(),
         fruit: [
-          {name: '余额校验', id: '1', icon: 'social-yen', type: 'ghost',notLogic:true},
-          {name: '城市校验', id: '2', icon: 'location', type: 'ghost',notLogic:true},
-          {name: '类别校验', id: '3', icon: 'navicon-round', type: 'ghost',notLogic:true},
+          {name: '余额校验', id: '1', icon: 'social-yen', type: 'ghost', notLogic: true},
+          {name: '城市校验', id: '2', icon: 'location', type: 'ghost', notLogic: true},
+          {name: '类别校验', id: '3', icon: 'navicon-round', type: 'ghost', notLogic: true},
         ],
         girl: [
           {name: '(', id: '(', icon: 'primary', type: 'ghost', remove: false},
@@ -198,6 +200,7 @@
               label: '审核'
             },
           ],
+        editingLoading: false,
       }
     }
     ,
@@ -222,23 +225,81 @@
           this.doubleCount = 0;
         }
       },
-      saveNode(entity) {
-        var rule = {
-          rule: [],
-          nodeType: '',
-        };
-        rule.nodeType = this.nodeType;
-        rule.rule = entity;
-        this.processes.push(rule);
-        //TODO 更新rule
+      saveRule(entity) {
+        var validate = this.nodeType !== '';
+        if (validate) {
+          var rule = {
+            rule: [],
+            nodeType: '',
+          };
+          rule.nodeType = this.nodeType;
+          rule.rule = entity;
+          this.processes.push(rule);
+          this.updateRule(false);
+          this.editingLoading = false;
+
+          return this.editingLoading = false;
+        } else {
+          this.$Message.warning('缺少节点信息，请选择节点后再点击确定!');
+
+          return this.changeLoading();
+        }
+
+
+      },
+      changeLoading() {
+        this.editingLoading = false;
+        this.$nextTick(() => {
+          this.editingLoading = true;
+        });
       },
       removeRule(entity) {
         entity.removeFlag = true;
         this.processes = this.processes.filter(function (i) {
           return !i.removeFlag;
-        })
+        });
+        //然后传入后台。根据id来更新
+        this.updateRule(false);
+      },
+
+      updateRule(flag) {
+        var id = this.row.id;
+        var processModels = [];
+        this.processes.forEach(value => {
+          //规则和内容
+          var ruleRelation = '';
+          var ruleText = '';
+          var processModel = {};
+          processModel.nodeType = value.nodeType === null ? 1 : value.nodeType;
+          processModel.nodeName = value.nodeType === '1' ? '提单' : '审核';
+          value.rule.forEach(value1 => {
+            ruleRelation += value1.id + ' ';
+            ruleText += value1.name + ' ';
+          })
+          processModel.ruleText = ruleText;
+          processModel.ruleRelation = ruleRelation;
+          processModels.push(processModel);
+        });
+        var request = {
+          id: id,
+          procedureModel: processModels,
+        };
+        var params = {
+          request: JSON.stringify(request),
+          //1保存 2更新
+          type: flag ? 1 : 2,
+        };
+        this.$api.ruleSaveOrUpdate(params).then((response) => {
+          var code = response.code;
+          if (code === 0) {
+            this.editingLoading = false;
+            this.$Message.success('Success!');
+          }
+
+        });
       },
     }
+    ,
   };
 </script>
 <style scoped>

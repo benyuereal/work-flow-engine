@@ -178,7 +178,16 @@ const nodeSave = params => {
     method: 'post',
     params: params
   })
-}
+};
+
+const ruleSaveOrUpdate = params => {
+  return fetch({
+    url: `/procedure/rule/update`,
+    method: 'post',
+    params: params
+  })
+};
+
 const apiList = {
   procedureList,
   articleList,
@@ -199,6 +208,7 @@ const apiList = {
   nodeRemove,
   nodeSave,
   login,
+  ruleSaveOrUpdate,
 
 }
 
