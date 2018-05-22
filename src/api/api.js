@@ -27,7 +27,7 @@ const login = params => {
 
 const procedureList = params => {
   return fetch({
-    url: `/procedure/test`,
+    url: `/test`,
     method: 'get',
     params: params
   })

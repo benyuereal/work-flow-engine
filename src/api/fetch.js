@@ -28,6 +28,7 @@ export default function fetch(options) {
   } else if (post) {
     options.params.ticket = util.getUrlKey('ticket');
   }
+  console.log(JSON.stringify(options.params));
   // alert(JSON.stringify(options));
   return new Promise((resolve, reject) => {
     const instance = axios.create({
@@ -38,6 +39,7 @@ export default function fetch(options) {
     // http request 拦截器
     instance.interceptors.request.use(
       config => {
+        // console.log(JSON.stringify(config));
         iView.LoadingBar.start();
         // config.headers.Authorization = 'token'
         return config

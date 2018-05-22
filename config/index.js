@@ -9,6 +9,8 @@ var config = {
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
     productionSourceMap: true,
+    baseServerUrl: 'http://10.252.55.42:9501/',
+
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -26,6 +28,7 @@ var config = {
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
+    //注意 这个不同于生产 不要乱调试
     assetsPublicPath: '/',
     baseServerUrl: 'http://10.252.55.42:9501/',
     proxyTable: {},
@@ -52,4 +55,4 @@ for (let i = 0; i < proxyList.length; i++) {
     changeOrigin: true
   }
 }
-module.exports = config
+module.exports = config;

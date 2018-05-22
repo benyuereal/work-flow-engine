@@ -1,0 +1,1 @@
+### 接口文档地址请参考：<http://rap2.taobao.org/repository/editor?id=12660>
