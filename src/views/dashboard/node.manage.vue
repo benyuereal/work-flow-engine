@@ -104,7 +104,7 @@
         </FormItem>
         <FormItem label="模板类型">
           <Select v-model="formItem.type" disabled>
-            <Option v-for="item in typeList" :value="formItem.type" :key="item.value">{{ item.label }}</Option>
+            <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </FormItem>
         <FormItem label="模板实现类">
@@ -135,8 +135,8 @@
         </FormItem>
         <FormItem label="模板类型" prop="type">
           <Select v-model="formItem.type" placeholder="请选择模板类型" clearable>
-            <Option value="1">节点</Option>
-            <Option value="2">规则</Option>
+            <Option v-for="item in stateType" :value="item.value" :key="item.value">{{ item.label }}</Option>
+
           </Select>
           <!-- <Select v-model="formItem.type">
           </Select> -->
@@ -205,11 +205,11 @@
         },
         typeList: [
           {
-            value: 1,
+            value: "1",
             label: '节点'
           },
           {
-            value: 2,
+            value: "2",
             label: '规则'
           }
         ],
@@ -381,7 +381,10 @@
         this.$api.nodeDetail(request).then((response) => {
           // 返回数据 json， 返回的数据就是json格式
           this.title = '修改节点';
+
           this.formItem = response.data.businessFlowNode;
+          var type=this.formItem.type;
+          type === 1 ? this.formItem.type = '1' : this.formItem.type = '2';
           console.log(this.formItem)
         });
       },

@@ -99,7 +99,7 @@
       @on-ok="validateProcedureData"
       title="流程配置管理"
       v-model="procedureFormDisplayFlag"
-      :styles="{top: '20px'}">
+      :styles="{top: '20px'}" :loading="procedureLoading">
       <Form ref="formItem" :model="formItem" label-position="left" :rules="ruleValidate">
         <FormItem label="流程名称" prop="procedureName">
           <Input v-model="formItem.procedureName" placeholder="Enter something..." clearable
@@ -290,7 +290,7 @@
         //流程保存标志位
         //1保存 2 更新
         procedureSaveFlag: true,
-        procedureLoading: false,
+        procedureLoading: true,
         //校验数组
 
         //formDisable来控制是否可以操作
