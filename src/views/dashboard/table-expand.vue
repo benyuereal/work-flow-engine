@@ -237,12 +237,8 @@
           this.processes.push(rule);
           this.updateRule(false);
           this.editingLoading = false;
-
-          return this.editingLoading = false;
         } else {
           this.$Message.warning('缺少节点信息，请选择节点后再点击确定!');
-
-          return this.changeLoading();
         }
 
 
